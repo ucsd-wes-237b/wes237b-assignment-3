@@ -105,7 +105,7 @@ int main(int argc, const char * argv[])
         }
 
         //Write the current output
-        char filename[128];
+        char filename[256];
         sprintf(filename, "./image_outputs/%s.tif", descr);
         imwrite(filename, sobel_out);
 
