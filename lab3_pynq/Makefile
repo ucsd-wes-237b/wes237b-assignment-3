@@ -1,5 +1,6 @@
 CXX?=g++
 CXXFLAGS=-O0 -std=c++11 -mfpu=neon -pg
+#CXXFLAGS=-Og -g -std=c++11 -mfpu=neon -pg
 
 EXEC=lab3_fir
 
@@ -19,7 +20,7 @@ OBJS := $(CXXSRCS:src/%.cxx=$(BUILD_DIR)%.o)
 CXXFLAGS += -Iinclude
 
 # Libraries
-LDFLAGS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs -lopencv_videoio
+LDFLAGS += 
 
 ###
 # Build rules
