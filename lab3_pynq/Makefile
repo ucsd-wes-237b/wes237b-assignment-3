@@ -3,28 +3,45 @@ CXXFLAGS=-O0 -std=c++11 -mfpu=neon -pg
 
 EXEC=lab3_fir
 
-INCLUDEDIR=include
-SRCDIR=src
-OBJDIR=objs
+###
+# Setup & config
+###
 
-OPENCV_INCLUDE_PATH = `pkg-config --cflags opencv`
-OPENCV_LIBS = `pkg-config --libs opencv`
+BUILD_DIR := build/
 
-LIBS=-lc $(OPENCV_LIBS)
+# C++ source files
+CXXSRCS := $(wildcard src/*.cxx)
 
-SRCS=$(wildcard $(SRCDIR)/*.cpp)
-OBJS=$(patsubst $(SRCDIR)/*.cpp, $(OBJDIR)/*.o, $(SRCS))
-INCLUDES=-I$(INCLUDEDIR) $(OPENCV_INCLUDE_PATH)
+# Create list of objects to build
+OBJS := $(CXXSRCS:src/%.cxx=$(BUILD_DIR)%.o)
 
-all: $(SRCS) $(EXEC)
+# Any flags for the C++ compiler?
+CXXFLAGS += -Iinclude
 
+# Libraries
+LDFLAGS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs -lopencv_videoio
+
+###
+# Build rules
+###
+
+# Convention, `all` is a phony target that builds everything
+# and must be listed first
+.PHONY: all
+all:	$(EXEC)
+
+# Binary depends on its objects (use default build rules)
 $(EXEC): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) -o $(EXEC) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(EXEC) $(LDFLAGS)
 
-%.o: %.cpp
+$(BUILD_DIR)%.o: src/%.cxx
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+###
+# Convenience targets
+###
+
+.PHONY: clean
 clean:
-	rm -f $(EXEC)
-	rm -f $(OBJDIR)/*.o
-	rm gmon.out
+	rm -rf build/*
+	rm -f $(BIN)

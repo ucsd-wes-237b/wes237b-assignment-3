@@ -68,7 +68,7 @@ int main(int argc, const char * argv[])
 			break;
 		}
 
-		cvtColor(frame, gray, CV_BGR2GRAY);
+		cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
 		resize(gray, gray, Size(WIDTH, HEIGHT));
         imwrite("./image_outputs/image_gray.tif", gray);
 
